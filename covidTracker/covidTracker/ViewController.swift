@@ -12,7 +12,9 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
     @IBOutlet weak var globalCases: UILabel!
     @IBOutlet weak var globalDeaths: UILabel!
-
+    @IBOutlet weak var countryConfirmed: UILabel!
+    @IBOutlet weak var countryDeaths: UILabel!
+    
 
     let countries = ["Ghana", "Nigeria", "Togo", "Mali", "Senegal", "Cameroon"]
 
@@ -25,7 +27,6 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
            countryPicker.delegate = self
         apiManager.delegate = self
 
-        apiManager.fetchStats()
        }
 
 
@@ -47,7 +48,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         let selectedRow = row
-
+        apiManager.fetchStats(with: countries[selectedRow])
 
     }
 
@@ -57,8 +58,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
 extension ViewController: ApiManagerDelegate {
     func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel) {
-        globalCases.text = String(stats.confirmed)
-        globalDeaths.text = String(stats.deaths)
+        DispatchQueue.main.async {
+            self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed))"
+            self.globalDeaths.text = "Deaths: \(String(stats.deaths))"
+            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.confirmed))"
+            self.countryDeaths.text = "Deaths: \(String(stats.deaths))"
+
+        }
        }
 
        func didFailWithError(error: Error) {

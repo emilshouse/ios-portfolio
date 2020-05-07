@@ -9,7 +9,7 @@
 import Foundation
 
 struct CovidData: Codable {
-  //  let location: Location
+    let locations: [Location]
     let latest: Latest
   //  let timeline: Timeline
 }
@@ -18,6 +18,8 @@ struct CovidData: Codable {
 struct Location: Codable {
     let id: Int
     let country: String
+    let latest: Latest
+    
 }
 
 struct Latest: Codable {

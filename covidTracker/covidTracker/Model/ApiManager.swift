@@ -24,8 +24,16 @@ struct ApiManager {
     var delegate: ApiManagerDelegate?
 
 
-    func fetchStats()  {
-        let urlString = "\(apiURL)/latest"
+    func fetchStats(with country: String)  {
+        let urlString = "\(apiURL)locations?country=\(country)"
+        print(urlString)
+        performRequest(urlString: urlString)
+
+    }
+
+    func fetchStats() {
+        let urlString = "\(apiURL)latest"
+        print(urlString)
         performRequest(urlString: urlString)
 
     }
@@ -49,11 +57,13 @@ struct ApiManager {
                     print(safeData)
                 }
 
+                if let sessResponse = response {
+                  //  print("session response: \(sessResponse)")
+                }
 
             }
             task.resume()
         }
-
 
     }
 
@@ -61,12 +71,16 @@ struct ApiManager {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(CovidData.self, from: covidData)
-            print("decoded Data \(decodedData)")
+           // print("decoded Data \(decodedData)")
             let confirmed = decodedData.latest.confirmed
-            print(confirmed)
+         //   print(confirmed)
             let deaths = decodedData.latest.deaths
 
-            let covidModel = CovidModel(confirmed: confirmed, deaths: deaths)
+            //let country = decodedData.locations[0].country
+            let countryConfirmed = decodedData.locations[0].latest.confirmed
+            let countryDeaths = decodedData.locations[0].latest.deaths
+
+            let covidModel = CovidModel(confirmed: confirmed, deaths: deaths, country: nil, countryConfirmed: countryConfirmed, countryDeaths: countryDeaths)
             return covidModel
 
         } catch {
@@ -74,7 +88,6 @@ struct ApiManager {
            // print("Error parsing JSON")
             return nil
         }
-
 
     }
 }
