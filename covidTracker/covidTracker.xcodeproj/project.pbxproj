@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD403BB52474E8B9009E3170 /* covidLatestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD403BB42474E8B9009E3170 /* covidLatestModel.swift */; };
 		AD5C18792460F1F7004BF363 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C18782460F1F7004BF363 /* AppDelegate.swift */; };
 		AD5C187B2460F1F7004BF363 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C187A2460F1F7004BF363 /* SceneDelegate.swift */; };
 		AD5C187D2460F1F7004BF363 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C187C2460F1F7004BF363 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD403BB42474E8B9009E3170 /* covidLatestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = covidLatestModel.swift; sourceTree = "<group>"; };
 		AD5C18752460F1F7004BF363 /* covidTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = covidTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD5C18782460F1F7004BF363 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AD5C187A2460F1F7004BF363 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -83,6 +85,7 @@
 				AD98E1F82462727600BD9D46 /* CovidData.swift */,
 				AD98E1FA2462729900BD9D46 /* ApiManager.swift */,
 				AD98E1FC246273B300BD9D46 /* CovidModel.swift */,
+				AD403BB42474E8B9009E3170 /* covidLatestModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -178,6 +181,7 @@
 				AD98E1F92462727600BD9D46 /* CovidData.swift in Sources */,
 				AD98E1FD246273B300BD9D46 /* CovidModel.swift in Sources */,
 				AD5C18792460F1F7004BF363 /* AppDelegate.swift in Sources */,
+				AD403BB52474E8B9009E3170 /* covidLatestModel.swift in Sources */,
 				AD5C18832460F1F7004BF363 /* covidTracker.xcdatamodeld in Sources */,
 				AD98E1FB2462729900BD9D46 /* ApiManager.swift in Sources */,
 				AD5C187B2460F1F7004BF363 /* SceneDelegate.swift in Sources */,

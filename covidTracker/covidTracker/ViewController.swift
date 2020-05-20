@@ -27,6 +27,8 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
            countryPicker.delegate = self
         apiManager.delegate = self
 
+        apiManager.fetchLatestStats()
+
        }
 
 
@@ -57,12 +59,19 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 }
 
 extension ViewController: ApiManagerDelegate {
-    func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel) {
+    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel) {
         DispatchQueue.main.async {
             self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed))"
             self.globalDeaths.text = "Deaths: \(String(stats.deaths))"
-            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.confirmed))"
-            self.countryDeaths.text = "Deaths: \(String(stats.deaths))"
+        }
+
+    }
+
+    func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel) {
+        DispatchQueue.main.async {
+
+            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.countryConfirmed))"
+            self.countryDeaths.text = "Deaths: \(String(stats.countryDeaths))"
 
         }
        }

@@ -11,11 +11,10 @@ import Foundation
 
 protocol ApiManagerDelegate {
     func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel)
+    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel)
     func didFailWithError(error: Error)
 
 }
-
-
 
 struct ApiManager {
 
@@ -31,14 +30,12 @@ struct ApiManager {
 
     }
 
-    func fetchStats() {
+    func fetchLatestStats() {
         let urlString = "\(apiURL)latest"
-        print(urlString)
-        performRequest(urlString: urlString)
-
+        performRequest(urlString: urlString, withLatest: true)
     }
 
-    func performRequest(urlString: String) {
+    func performRequest(urlString: String, withLatest: Bool = false) {
 
         if let url = URL(string: urlString) {
 
@@ -50,38 +47,49 @@ struct ApiManager {
                 }
 
                 if let safeData = data {
-                    if let covidStats = self.parseJSON(with: safeData) {
-                        self.delegate?.didUpdateStats(self, stats: covidStats)
-
+                    if !withLatest {
+                        if let info = self.parseJSON(with: safeData, withLatest: withLatest) {
+                            if let covidStats = info as? CovidModel {
+                                self.delegate?.didUpdateStats(self, stats: covidStats)
+                            }
+                        }
+                    } else {
+                        if let info = self.parseJSON(with: safeData, withLatest: withLatest) {
+                            if let covidLatestStats = info as? CovidLatestModel {
+                            self.delegate?.didUpdateLatest(self, stats: covidLatestStats)
+                            }
+                        }
                     }
+
                     print(safeData)
                 }
 
-                if let sessResponse = response {
-                  //  print("session response: \(sessResponse)")
-                }
-
+//                if let sessResponse = response {
+//                  //  print("session response: \(sessResponse)")
+//                }
             }
             task.resume()
         }
 
     }
 
-    func parseJSON(with covidData: Data ) -> CovidModel? {
+    func parseJSON(with covidData: Data, withLatest: Bool ) -> Any? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(CovidData.self, from: covidData)
-           // print("decoded Data \(decodedData)")
             let confirmed = decodedData.latest.confirmed
-         //   print(confirmed)
             let deaths = decodedData.latest.deaths
 
-            //let country = decodedData.locations[0].country
-            let countryConfirmed = decodedData.locations[0].latest.confirmed
-            let countryDeaths = decodedData.locations[0].latest.deaths
+//            let countryConfirmed = decodedData.locations[0].latest.confirmed
+//            let countryDeaths = decodedData.locations[0].latest.deaths
 
-            let covidModel = CovidModel(confirmed: confirmed, deaths: deaths, country: nil, countryConfirmed: countryConfirmed, countryDeaths: countryDeaths)
-            return covidModel
+            if !withLatest {
+                let covidModel = CovidModel(country: nil, countryConfirmed: confirmed, countryDeaths: deaths)
+                return covidModel
+            } else {
+                let covidLatestModel = CovidLatestModel(confirmed: confirmed, deaths: deaths)
+                return covidLatestModel
+            }
 
         } catch {
            delegate?.didFailWithError(error: error)

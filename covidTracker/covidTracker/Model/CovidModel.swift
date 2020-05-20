@@ -9,10 +9,10 @@
 import Foundation
 
 struct CovidModel {
-    let confirmed: Int
-    let deaths: Int
+//    let confirmed: Int
+//    let deaths: Int
     let country: String?
-    let countryConfirmed: Int?
-    let countryDeaths: Int?
+    let countryConfirmed: Int
+    let countryDeaths: Int
   //  let recovered: Int
 }

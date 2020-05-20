@@ -9,18 +9,19 @@
 import Foundation
 
 struct CovidData: Codable {
-    let locations: [Location]
     let latest: Latest
+    
+   // let locations: [Location]
   //  let timeline: Timeline
 }
 
 
-struct Location: Codable {
-    let id: Int
-    let country: String
-    let latest: Latest
-    
-}
+//struct Location: Codable {
+//    let id: Int
+//    let country: String
+//    let latest: Latest
+//    
+//}
 
 struct Latest: Codable {
     let confirmed: Int
