@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet weak var globalCases: UILabel!
     @IBOutlet weak var globalDeaths: UILabel!
@@ -20,12 +20,16 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
 
     var apiManager = ApiManager()
 
+    var tableView = UITableView()
+
+
 
     override func viewDidLoad() {
            super.viewDidLoad()
-           countryPicker.dataSource = self
-           countryPicker.delegate = self
         apiManager.delegate = self
+
+        tableView.delegate = self
+        tableView.dataSource = self
 
         apiManager.fetchLatestStats()
 
@@ -37,32 +41,30 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         return 1
     }
 
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-       return 6
 
-    }
-
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-
-            return countries[row] //"First \(row)"
-
-    }
-
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedRow = row
-        apiManager.fetchStats(with: countries[selectedRow])
-
-    }
 
     @IBOutlet weak var countryPicker: UIPickerView!
 
 }
 
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = "Ghana"
+        cell.detailTextLabel?.text = "Cases: 10, Deaths: 1"
+        return cell
+    }
+}
+
 extension ViewController: ApiManagerDelegate {
     func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel) {
         DispatchQueue.main.async {
-            self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed))"
-            self.globalDeaths.text = "Deaths: \(String(stats.deaths))"
+            self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed.withCommas()))"
+            self.globalDeaths.text = "Deaths: \(String(stats.deaths.withCommas()))"
         }
 
     }
@@ -70,8 +72,8 @@ extension ViewController: ApiManagerDelegate {
     func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel) {
         DispatchQueue.main.async {
 
-            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.countryConfirmed))"
-            self.countryDeaths.text = "Deaths: \(String(stats.countryDeaths))"
+            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.countryConfirmed.withCommas()))"
+            self.countryDeaths.text = "Deaths: \(String(stats.countryDeaths.withCommas()))"
 
         }
        }
@@ -81,3 +83,10 @@ extension ViewController: ApiManagerDelegate {
        }
 }
 
+extension Int {
+    func withCommas() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        return numberFormatter.string(from: NSNumber(value:self))!
+    }
+}
