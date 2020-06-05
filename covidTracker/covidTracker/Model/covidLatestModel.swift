@@ -9,7 +9,8 @@
 import Foundation
 
 struct CovidLatestModel {
-let confirmed: Int
-let deaths: Int
+    
+    let confirmed: Int
+    let deaths: Int
 
 }

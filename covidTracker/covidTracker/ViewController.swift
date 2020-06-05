@@ -12,15 +12,22 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var globalCases: UILabel!
     @IBOutlet weak var globalDeaths: UILabel!
-    @IBOutlet weak var countryConfirmed: UILabel!
-    @IBOutlet weak var countryDeaths: UILabel!
-    
 
-    let countries = ["Ghana", "Nigeria", "Togo", "Mali", "Senegal", "Cameroon"]
+    @IBOutlet weak var tableView: UITableView!
+
+    @IBAction func reload(_ sender: UIButton) {
+        tableView.reloadData()
+    }
+
+    var countries = [CovidModel]() {
+        didSet{
+            tableView.reloadData()
+        }
+    }
 
     var apiManager = ApiManager()
 
-    var tableView = UITableView()
+  //  var tableView = UITableView()
 
 
 
@@ -31,52 +38,51 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
-        apiManager.fetchLatestStats()
+    //    apiManager.fetchLatestStats()
+        apiManager.fetchStats()
+
 
        }
-
-
-
-   func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-
-
-
-    @IBOutlet weak var countryPicker: UIPickerView!
 
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return self.countries.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Ghana"
-        cell.detailTextLabel?.text = "Cases: 10, Deaths: 1"
+        cell.textLabel?.text = self.countries[indexPath.row].country
+        cell.detailTextLabel?.text = "Cases: \(countries[indexPath.row].countryConfirmed.withCommas()), Deaths: \(countries[indexPath.row].countryDeaths.withCommas())"
         return cell
     }
 }
 
 extension ViewController: ApiManagerDelegate {
-    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel) {
+    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel,  countries: [CovidModel]) {
         DispatchQueue.main.async {
             self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed.withCommas()))"
             self.globalDeaths.text = "Deaths: \(String(stats.deaths.withCommas()))"
+            self.countries = countries
+
         }
 
     }
 
-    func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel) {
-        DispatchQueue.main.async {
-
-            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.countryConfirmed.withCommas()))"
-            self.countryDeaths.text = "Deaths: \(String(stats.countryDeaths.withCommas()))"
-
-        }
-       }
+//    func didUpdateStats(_ apiManager: ApiManager, stats: [CovidModel]) {
+//
+//        countries = stats
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//
+//        }
+//        print("Stats: \(stats.count)")
+//        print("Countries: \(countries.count)")
+////            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.countryConfirmed.withCommas()))"
+////            self.countryDeaths.text = "Deaths: \(String(stats.countryDeaths.withCommas()))"
+//
+//       }
 
        func didFailWithError(error: Error) {
            print(error)
