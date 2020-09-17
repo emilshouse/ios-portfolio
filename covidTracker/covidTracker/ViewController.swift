@@ -8,67 +8,70 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet weak var globalCases: UILabel!
     @IBOutlet weak var globalDeaths: UILabel!
-    @IBOutlet weak var countryConfirmed: UILabel!
-    @IBOutlet weak var countryDeaths: UILabel!
-    
+    @IBOutlet weak var tableView: UITableView!
 
-    let countries = ["Ghana", "Nigeria", "Togo", "Mali", "Senegal", "Cameroon"]
+    @IBAction func reload(_ sender: UIButton) {
+        tableView.reloadData()
+    }
+
+    var countries = [CovidModel]() {
+        didSet{
+            tableView.reloadData()
+        }
+    }
 
     var apiManager = ApiManager()
 
-
     override func viewDidLoad() {
-           super.viewDidLoad()
-           countryPicker.dataSource = self
-           countryPicker.delegate = self
+        super.viewDidLoad()
         apiManager.delegate = self
 
-       }
+        tableView.delegate = self
+        tableView.dataSource = self
 
+        //    apiManager.fetchLatestStats()
+        apiManager.fetchStats()
 
-
-   func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
-    }
-
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-       return 6
 
     }
+}
 
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-
-            return countries[row] //"First \(row)"
-
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.countries.count
     }
 
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        let selectedRow = row
-        apiManager.fetchStats(with: countries[selectedRow])
-
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = self.countries[indexPath.row].country
+        cell.detailTextLabel?.text = "Cases: \(countries[indexPath.row].countryConfirmed.withCommas()), Deaths: \(countries[indexPath.row].countryDeaths.withCommas())"
+        return cell
     }
-
-    @IBOutlet weak var countryPicker: UIPickerView!
-
 }
 
 extension ViewController: ApiManagerDelegate {
-    func didUpdateStats(_ apiManager: ApiManager, stats: CovidModel) {
+    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel,  countries: [CovidModel]) {
         DispatchQueue.main.async {
-            self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed))"
-            self.globalDeaths.text = "Deaths: \(String(stats.deaths))"
-            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.confirmed))"
-            self.countryDeaths.text = "Deaths: \(String(stats.deaths))"
+            self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed.withCommas()))"
+            self.globalDeaths.text = "Deaths: \(String(stats.deaths.withCommas()))"
+            self.countries = countries
 
         }
-       }
+    }
 
-       func didFailWithError(error: Error) {
-           print(error)
-       }
+    func didFailWithError(error: Error) {
+        print(error)
+    }
 }
 
+extension Int {
+    func withCommas() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        return numberFormatter.string(from: NSNumber(value:self))!
+    }
+}
