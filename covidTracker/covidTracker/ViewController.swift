@@ -12,7 +12,6 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var globalCases: UILabel!
     @IBOutlet weak var globalDeaths: UILabel!
-
     @IBOutlet weak var tableView: UITableView!
 
     @IBAction func reload(_ sender: UIButton) {
@@ -27,23 +26,18 @@ class ViewController: UIViewController {
 
     var apiManager = ApiManager()
 
-  //  var tableView = UITableView()
-
-
-
     override func viewDidLoad() {
-           super.viewDidLoad()
+        super.viewDidLoad()
         apiManager.delegate = self
 
         tableView.delegate = self
         tableView.dataSource = self
 
-    //    apiManager.fetchLatestStats()
+        //    apiManager.fetchLatestStats()
         apiManager.fetchStats()
 
 
-       }
-
+    }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -67,26 +61,11 @@ extension ViewController: ApiManagerDelegate {
             self.countries = countries
 
         }
-
     }
 
-//    func didUpdateStats(_ apiManager: ApiManager, stats: [CovidModel]) {
-//
-//        countries = stats
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//
-//        }
-//        print("Stats: \(stats.count)")
-//        print("Countries: \(countries.count)")
-////            self.countryConfirmed.text = "Confirmed Cases: \(String(stats.countryConfirmed.withCommas()))"
-////            self.countryDeaths.text = "Deaths: \(String(stats.countryDeaths.withCommas()))"
-//
-//       }
-
-       func didFailWithError(error: Error) {
-           print(error)
-       }
+    func didFailWithError(error: Error) {
+        print(error)
+    }
 }
 
 extension Int {

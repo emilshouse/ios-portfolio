@@ -13,9 +13,5 @@ struct CovidModel {
     var country: String?
     var countryConfirmed: Int
     var countryDeaths: Int
-    var country_population: Int
-  //  let recovered: Int
 
-   // let confirmed: Int
-   // let deaths: Int
 }

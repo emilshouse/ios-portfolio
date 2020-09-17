@@ -18,66 +18,17 @@ protocol ApiManagerDelegate {
 
 struct ApiManager {
 
-    let apiURL: String = "https://coronavirus-tracker-api.herokuapp.com/v2/"
+    let apiURL: String = "https://api.covid19api.com/summary"
 
     var delegate: ApiManagerDelegate?
 
 
     func fetchStats()  {
-//        let urlString = "\(apiURL)locations?country=\(country)"
-        let urlString = "\(apiURL)locations"
-        print(urlString)
+
+        let urlString = "\(apiURL)"
         performRequest(urlString: urlString)
 
     }
-
-//    func fetchAllStats() {
-//        let urlString = "\(apiURL)locations"
-//        performRequest(urlString: urlString, withLatest: false)
-//    }
-//
-//    func fetchLatestStats() {
-//        let urlString = "\(apiURL)locations"
-//        performRequest(urlString: urlString, withLatest: true)
-//    }
-
-//    func performRequest(urlString: String, withLatest: Bool = false) {
-//
-//        if let url = URL(string: urlString) {
-//
-//            let session = URLSession(configuration: .default)
-//            let task = session.dataTask(with: url) { (data, response, error) in
-//                if  error != nil {
-//                    self.delegate?.didFailWithError(error: error!)
-//                    print("There was an error \(error!)")
-//                }
-//
-//                if let safeData = data {
-//                    if !withLatest {
-//                        if let info = self.parseJSON(with: safeData, withLatest: withLatest) {
-//                            if let covidStats = info as? [CovidModel] {
-//                                self.delegate?.didUpdateStats(self, stats: covidStats)
-//                            }
-//                        }
-//                    } else {
-//                        if let info = self.parseJSON(with: safeData, withLatest: withLatest) {
-//                            if let covidLatestStats = info as? CovidLatestModel {
-//                            self.delegate?.didUpdateLatest(self, stats: covidLatestStats)
-//                            }
-//                        }
-//                    }
-//
-//                    print(safeData)
-//                }
-//
-////                if let sessResponse = response {
-////                  //  print("session response: \(sessResponse)")
-////                }
-//            }
-//            task.resume()
-//        }
-//
-//    }
 
     func performRequest(urlString: String) {
 
@@ -91,6 +42,7 @@ struct ApiManager {
 
                 if let safeData = data {
                      let info = self.parseJSON(with: safeData)
+                    print(info)
                      let latestData = info.latest
                     let allcountries = info.allLocations
                     self.delegate?.didUpdateLatest(self, stats: latestData!, countries: allcountries! )
@@ -107,18 +59,18 @@ struct ApiManager {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(CovidData.self, from: covidData)
-            let confirmed = decodedData.latest.confirmed
-            let deaths = decodedData.latest.deaths
+            let confirmed = decodedData.Global.TotalConfirmed
+            let deaths = decodedData.Global.TotalDeaths
 
             var allLocations = [CovidModel]()
 
-            for location in decodedData.locations {
-                var countryStat = CovidModel(country: "", countryConfirmed: 0, countryDeaths: 0, country_population: 0)
+            for location in decodedData.Countries {
+                var countryStat = CovidModel(country: "", countryConfirmed: 0, countryDeaths: 0)
 
-                countryStat.country = location.country
-                countryStat.country_population = location.country_population ?? 0
-                countryStat.countryConfirmed = location.latest.confirmed
-                countryStat.countryDeaths = location.latest.deaths
+                countryStat.country = location.Country
+            //  countryStat.country_population = location.country_population ?? 0
+                countryStat.countryConfirmed = location.TotalConfirmed
+                countryStat.countryDeaths = location.TotalDeaths
 
                 allLocations.append(countryStat)
             }
