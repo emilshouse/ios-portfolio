@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     }
     
     var countries = [CovidModel]() {
-        didSet{
+        didSet {
             tableView.reloadData()
         }
     }
@@ -37,8 +37,7 @@ class ViewController: UIViewController {
         tableView.dataSource = self
         
         apiManager.fetchStats()
-        
-        
+
     }
 }
 
@@ -60,7 +59,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ViewController: ApiManagerDelegate {
-    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel,  countries: [CovidModel]) {
+    func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel, countries: [CovidModel]) {
         DispatchQueue.main.async {
             self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed.withCommas()))"
             self.globalDeaths.text = "Deaths: \(String(stats.deaths.withCommas()))"
@@ -78,6 +77,6 @@ extension Int {
     func withCommas() -> String {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
-        return numberFormatter.string(from: NSNumber(value:self))!
+        return numberFormatter.string(from: NSNumber(value: self))!
     }
 }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+// swiftlint:disable all
 struct CovidData: Codable {
     let Global: Global
     let Countries: [Countries]

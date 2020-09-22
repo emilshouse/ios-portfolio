@@ -31,7 +31,7 @@ struct ApiManager {
         
         if let url = URL(string: urlString) {
             let session = URLSession(configuration: .default)
-            let task = session.dataTask(with: url) { (data, response, error) in
+            let task = session.dataTask(with: url) { (data, _, error) in
                 if error != nil {
                     self.delegate?.didFailWithError(error: error!)
                     print("There was an error \(error!)")
