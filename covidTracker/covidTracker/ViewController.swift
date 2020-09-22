@@ -36,7 +36,6 @@ class ViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
-        //    apiManager.fetchLatestStats()
         apiManager.fetchStats()
         
         
