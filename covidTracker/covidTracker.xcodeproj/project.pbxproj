@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD06A667251B74BC004B5E0F /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD06A666251B74BC004B5E0F /* DetailViewController.swift */; };
 		AD403BB52474E8B9009E3170 /* covidLatestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD403BB42474E8B9009E3170 /* covidLatestModel.swift */; };
 		AD5C18792460F1F7004BF363 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C18782460F1F7004BF363 /* AppDelegate.swift */; };
 		AD5C187B2460F1F7004BF363 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD5C187A2460F1F7004BF363 /* SceneDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD06A666251B74BC004B5E0F /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		AD403BB42474E8B9009E3170 /* covidLatestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = covidLatestModel.swift; sourceTree = "<group>"; };
 		AD5C18752460F1F7004BF363 /* covidTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = covidTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AD5C18782460F1F7004BF363 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				AD5C187C2460F1F7004BF363 /* ViewController.swift */,
+				AD06A666251B74BC004B5E0F /* DetailViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -199,6 +202,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD06A667251B74BC004B5E0F /* DetailViewController.swift in Sources */,
 				AD5C187D2460F1F7004BF363 /* ViewController.swift in Sources */,
 				AD98E1F92462727600BD9D46 /* CovidData.swift in Sources */,
 				AD98E1FD246273B300BD9D46 /* CovidModel.swift in Sources */,

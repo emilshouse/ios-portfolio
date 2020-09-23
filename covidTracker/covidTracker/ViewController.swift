@@ -49,12 +49,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         cell.textLabel?.text = self.countries[indexPath.row].country
-        cell.detailTextLabel?.text = "Cases: \(countries[indexPath.row].countryConfirmed.withCommas()) Deaths: \(countries[indexPath.row].countryDeaths.withCommas())"
+        cell.detailTextLabel?.text = "Cases: \(countries[indexPath.row].totalConfirmed.withCommas()) Deaths: \(countries[indexPath.row].totalDeaths.withCommas())"
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //display detail view.
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let detailVC = storyboard.instantiateViewController(withIdentifier: "detailView") as! DetailViewController
+
+        detailVC.countryStats = countries[indexPath.row]
+        print(detailVC.countryStats)
     }
 }
 

@@ -59,11 +59,15 @@ struct ApiManager {
             var allLocations = [CovidModel]()
             
             for location in decodedData.Countries {
-                var countryStat = CovidModel(country: "", countryConfirmed: 0, countryDeaths: 0)
+                var countryStat = CovidModel()
                 
                 countryStat.country = location.Country
-                countryStat.countryConfirmed = location.TotalConfirmed
-                countryStat.countryDeaths = location.TotalDeaths
+                countryStat.newConfirmed = location.NewConfirmed
+                countryStat.totalConfirmed = location.TotalConfirmed
+                countryStat.newDeaths = location.NewDeaths
+                countryStat.totalDeaths = location.TotalDeaths
+                countryStat.newRecovered = location.NewRecovered
+                countryStat.totalRecovered = location.TotalRecovered
                 
                 allLocations.append(countryStat)
             }
