@@ -54,16 +54,27 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let detailVC = storyboard.instantiateViewController(withIdentifier: "detailView") as! DetailViewController
 
         detailVC.countryStats = countries[indexPath.row]
         print(detailVC.countryStats)
+
+        self.add(detailVC)
+
+        detailVC.view.translatesAutoresizingMaskIntoConstraints = false
+        detailVC.view.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 200).isActive = true
+        detailVC.view.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
+        detailVC.view.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
+        detailVC.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -200).isActive = true
+
     }
 }
 
 extension ViewController: ApiManagerDelegate {
     func didUpdateLatest(_ apiManager: ApiManager, stats: CovidLatestModel, countries: [CovidModel]) {
+
         DispatchQueue.main.async {
             self.globalCases.text = "Confirmed Cases: \(String(stats.confirmed.withCommas()))"
             self.globalDeaths.text = "Deaths: \(String(stats.deaths.withCommas()))"
@@ -82,5 +93,20 @@ extension Int {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         return numberFormatter.string(from: NSNumber(value: self))!
+    }
+}
+
+extension UIViewController {
+    func add(_ child: UIViewController) {
+        addChild(child)
+        view.addSubview(child.view)
+        child.didMove(toParent: self)
+    }
+
+    func remove() {
+        guard parent != nil else { return }
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
     }
 }

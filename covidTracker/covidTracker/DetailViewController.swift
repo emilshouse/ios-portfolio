@@ -20,10 +20,23 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var newRecoveredLabel: UILabel!
     @IBOutlet weak var totalRecoveredLabel: UILabel!
 
+    @IBAction func dismissButton(_ sender: UIButton) {
+        self.remove()
+        
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.view.layer.cornerRadius = 12
+        self.view.layer.masksToBounds = true
+
+        countryLabel.text = "Country: " + countryStats.country
+        newCasesLabel.text = "New Confirmed: " + String(countryStats.newConfirmed.withCommas())
+        totalCasesLabel.text = "Total Confirmed: " + String(countryStats.totalConfirmed.withCommas())
+        newDeathsLabel.text = "New Deaths: " + String(countryStats.newDeaths.withCommas())
+        totalDeathsLabel.text = "Total Deaths: " + String(countryStats.totalDeaths.withCommas())
+        newRecoveredLabel.text = "New Recovered: " + String(countryStats.newRecovered.withCommas())
+        totalRecoveredLabel.text = "Total Recovered: " +  String(countryStats.totalRecovered.withCommas())
     }
     
     /*
