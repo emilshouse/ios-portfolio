@@ -11,6 +11,7 @@ import UIKit
 class DetailViewController: UIViewController {
 
     var countryStats = CovidModel()
+    var delegate: ReadytoDismiss?
     
     @IBOutlet weak var countryLabel: UILabel!
     @IBOutlet weak var newCasesLabel: UILabel!
@@ -22,6 +23,7 @@ class DetailViewController: UIViewController {
 
     @IBAction func dismissButton(_ sender: UIButton) {
         self.remove()
+        delegate?.removeDim()
         
     }
     override func viewDidLoad() {
@@ -49,4 +51,8 @@ class DetailViewController: UIViewController {
     }
     */
 
+}
+
+protocol ReadytoDismiss {
+    func removeDim()
 }

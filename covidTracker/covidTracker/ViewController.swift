@@ -20,6 +20,13 @@ class ViewController: UIViewController {
         apiManager.fetchStats()
 
     }
+
+    lazy var dimmedView: UIView = {
+        let uiView = UIView()
+        uiView.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
+        uiView.isHidden = true
+        return uiView
+    }()
     
     var countries = [CovidModel]() {
         didSet {
@@ -31,6 +38,9 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(dimmedView)
+        dimmedView.frame = view.frame
+
         apiManager.delegate = self
         
         tableView.delegate = self
@@ -58,6 +68,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let detailVC = storyboard.instantiateViewController(withIdentifier: "detailView") as! DetailViewController
 
+        detailVC.delegate = self
         detailVC.countryStats = countries[indexPath.row]
         print(detailVC.countryStats)
 
@@ -68,7 +79,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         detailVC.view.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 30).isActive = true
         detailVC.view.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -30).isActive = true
         detailVC.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -200).isActive = true
+        dimmedView.isHidden = false
 
+    }
+}
+
+extension ViewController: ReadytoDismiss {
+    func removeDim() {
+        dimmedView.isHidden = true
     }
 }
 
@@ -108,5 +126,6 @@ extension UIViewController {
         willMove(toParent: nil)
         view.removeFromSuperview()
         removeFromParent()
+        
     }
 }
